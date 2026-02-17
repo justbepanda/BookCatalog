@@ -1,0 +1,25 @@
+/vendor/
+
+.env
+
+.env.local
+.env.dev
+.env.test
+.env.prod
+
+# Специфика Yii 1.1
+/assets/*
+!/assets/.gitkeep
+/protected/runtime/*
+!/protected/runtime/.gitkeep
+
+/dbdata/
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+*.log
+/tmp/

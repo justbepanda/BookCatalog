@@ -1,0 +1,17 @@
+{
+  "name": "book/catalog",
+  "description": "Book catalog test project (Yii1)",
+  "type": "project",
+  "require": {
+    "php": "^8.2",
+    "yiisoft/yii": "1.1.29"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "audit": { "block-insecure": false }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6"
+  }
+}
