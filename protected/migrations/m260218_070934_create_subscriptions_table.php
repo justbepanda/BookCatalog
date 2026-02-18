@@ -9,6 +9,7 @@ class m260218_070934_create_subscriptions_table extends CDbMigration
             'author_id' => 'integer NOT NULL',
             'phone' => 'string NOT NULL',
             'created_at' => 'datetime NOT NULL',
+            'updated_at' => 'datetime NOT NULL',
         ]);
 
         $this->createIndex(

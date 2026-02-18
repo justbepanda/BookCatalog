@@ -106,4 +106,11 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+
+    public function actionTest()
+    {
+        $author = Author::model()->with('books')->find();
+        var_dump($author);
+        Yii::app()->end();
+    }
 }
