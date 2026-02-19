@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-    'name' => 'My Web Application',
+    'name' => 'Book catalog',
 
     // preloading 'log' component
     'preload' => array('log'),
@@ -19,6 +19,10 @@ return array(
     ),
 
     'modules' => array(
+        'Author',
+        'Book',
+        'Report',
+
         // uncomment the following to enable the Gii tool
         'gii' => array(
             'class' => 'system.gii.GiiModule',
@@ -79,5 +83,6 @@ return array(
     'params' => array(
         // this is used in contact page
         'adminEmail' => 'webmaster@example.com',
+        'smsPilotApiKey' => getenv('SMSPILOT_API_KEY'),
     ),
 );

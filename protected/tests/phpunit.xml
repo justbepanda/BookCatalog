@@ -1,13 +1,14 @@
-<phpunit bootstrap="bootstrap.php"
-		colors="false"
-		convertErrorsToExceptions="true"
-		convertNoticesToExceptions="true"
-		convertWarningsToExceptions="true"
-		stopOnFailure="false">
+<phpunit>
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>./unit</directory>
+        </testsuite>
+    </testsuites>
 
-	<selenium>
-		<browser name="Internet Explorer" browser="*iexplore" />
-		<browser name="Firefox" browser="*firefox" />
-	</selenium>
-
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../../protected/models</directory>
+            <directory suffix=".php">../../protected/components</directory>
+        </whitelist>
+    </filter>
 </phpunit>

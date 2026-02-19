@@ -40,7 +40,7 @@ class Author extends CActiveRecord
                 $this->created_at = $now;
             }
 
-            $this->updated_at = $now; // <- обязательно для всех записей
+            $this->updated_at = $now;
 
             return true;
         }

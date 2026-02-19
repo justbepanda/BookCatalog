@@ -37,8 +37,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - dbdata:/var/lib/mysql
+      - ./docker/db/init:/docker-entrypoint-initdb.d
     ports:
-      - "3307:3306" # внешний порт для хоста
+      - "3307:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s

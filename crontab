@@ -1,0 +1,3 @@
+# Запуск каждые 1 минуту
+* * * * * php /var/www/protected/yiic smsqueue process >> /var/www/protected/runtime/sms_cron.log 2>&1
+# Обязательно пустая строка в конце файла

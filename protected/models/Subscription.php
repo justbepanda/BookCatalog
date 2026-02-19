@@ -9,11 +9,17 @@ class Subscription extends CActiveRecord
 
     public function rules()
     {
-        return [
-            ['author_id, phone', 'required'],
-            ['phone', 'length', 'max' => 20],
-            ['author_id', 'numerical', 'integerOnly' => true],
-        ];
+        return array(
+            array('author_id, phone', 'required'),
+            array('author_id', 'numerical', 'integerOnly' => true),
+            // Очистка телефона перед валидацией
+            array('phone', 'filter', 'filter' => function ($value) {
+                return preg_replace('/[^0-9]/', '', $value);
+            }),
+            array('phone', 'length', 'min' => 10, 'max' => 15),
+            // Проверка на уникальность пары автор+телефон
+            array('phone', 'uniqueCombination'),
+        );
     }
 
     public function relations()
@@ -37,10 +43,26 @@ class Subscription extends CActiveRecord
                 $this->created_at = $now;
             }
 
-            $this->updated_at = $now; // <- обязательно для всех записей
+            $this->updated_at = $now;
 
             return true;
         }
         return false;
     }
+
+
+    /**
+     * Проверка уникальности пары
+     */
+    public function uniqueCombination($attribute, $params)
+    {
+        $existing = self::model()->findByAttributes([
+            'author_id' => $this->author_id,
+            'phone' => $this->phone
+        ]);
+        if ($existing) {
+            $this->addError($attribute, 'Этот номер уже подписан на данного автора.');
+        }
+    }
+
 }

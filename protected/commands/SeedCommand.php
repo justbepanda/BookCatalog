@@ -1,37 +1,33 @@
 <?php
 
+/**
+ * Команда для создания сидов
+ */
 class SeedCommand extends CConsoleCommand
 {
     /**
      * Заполняет базу тестовыми данными
      */
-    public function actionRun()
+    public function actionRun($fresh = false)
     {
-        $this->seedUsers();
+        if ($fresh) {
+            Yii::app()->db->createCommand('SET FOREIGN_KEY_CHECKS=0')->execute();
+
+            Yii::app()->db->createCommand()->truncateTable('subscriptions');
+            Yii::app()->db->createCommand()->truncateTable('book_author');
+            Yii::app()->db->createCommand()->truncateTable('books');
+            Yii::app()->db->createCommand()->truncateTable('authors');
+
+            Yii::app()->db->createCommand('SET FOREIGN_KEY_CHECKS=1')->execute();
+
+            echo "Tables cleared.\n";
+        }
+
         $this->seedAuthors();
         $this->seedBooks();
         $this->seedSubscriptions();
 
         echo "Seeding finished.\n";
-    }
-
-    /**
-     * Сидинг пользователей
-     */
-    protected function seedUsers()
-    {
-        $username = 'admin';
-        if (!User::model()->exists('username=:u', [':u' => $username])) {
-            $user = new User();
-            $user->username = $username;
-            $user->password_hash = password_hash('123456', PASSWORD_DEFAULT);
-            $user->role = 'user';
-            $user->created_at = date('Y-m-d H:i:s');
-            $user->save(false);
-            echo "User '{$username}' created.\n";
-        } else {
-            echo "User '{$username}' already exists.\n";
-        }
     }
 
     /**
@@ -57,10 +53,29 @@ class SeedCommand extends CConsoleCommand
     protected function seedBooks()
     {
         $authors = Author::model()->findAll();
+
         $booksData = [
-            ['title' => 'Книга 1', 'year' => 2020, 'isbn' => '1111-1111', 'description' => 'Описание книги 1'],
-            ['title' => 'Книга 2', 'year' => 2021, 'isbn' => '2222-2222', 'description' => 'Описание книги 2'],
-            ['title' => 'Книга 3', 'year' => 2022, 'isbn' => '3333-3333', 'description' => 'Описание книги 3'],
+            [
+                'title' => 'Книга 1',
+                'year' => 2020,
+                'isbn' => '1111-1111',
+                'description' => 'Описание книги 1',
+                'image_path' => '/images/books/book1.jpg',
+            ],
+            [
+                'title' => 'Книга 2',
+                'year' => 2021,
+                'isbn' => '2222-2222',
+                'description' => 'Описание книги 2',
+                'image_path' => '/images/books/book2.jpg',
+            ],
+            [
+                'title' => 'Книга 3',
+                'year' => 2022,
+                'isbn' => '3333-3333',
+                'description' => 'Описание книги 3',
+                'image_path' => '/images/books/book3.jpg',
+            ],
         ];
 
         foreach ($booksData as $data) {
@@ -68,43 +83,36 @@ class SeedCommand extends CConsoleCommand
                 $book = new Book();
                 $book->attributes = $data;
                 $book->created_at = date('Y-m-d H:i:s');
+                $book->updated_at = date('Y-m-d H:i:s');
                 $book->save(false);
 
                 // привязка авторов через pivot
                 shuffle($authors);
-                $linkedAuthors = array_slice($authors, 0, rand(1, 2));
+                $count = rand(1, min(3, count($authors)));
+                $linkedAuthors = array_slice($authors, 0, $count);
+
                 foreach ($linkedAuthors as $author) {
-                    $sql = "INSERT IGNORE INTO book_author (book_id, author_id) VALUES (:book_id, :author_id)";
-                    Yii::app()->db->createCommand($sql)->execute([
-                        ':book_id' => $book->id,
-                        ':author_id' => $author->id,
-                    ]);
+                    Yii::app()->db->createCommand()
+                        ->insert('book_author', [
+                            'book_id' => $book->id,
+                            'author_id' => $author->id,
+                        ]);
                 }
             }
         }
-        echo "Books and book-author links seeded.\n";
+
+        echo "Books seeded.\n";
     }
 
-    /**
-     * Сидинг подписок на авторов
-     */
     protected function seedSubscriptions()
     {
         $authors = Author::model()->findAll();
         foreach ($authors as $author) {
-            $exists = Subscription::model()->exists('author_id=:a AND phone=:p', [
-                ':a' => $author->id,
-                ':p' => '+7999000' . rand(1000, 9999),
-            ]);
-
-            if (!$exists) {
-                $sub = new Subscription();
-                $sub->author_id = $author->id;
-                $sub->phone = '+7999000' . rand(1000, 9999);
-                $sub->created_at = date('Y-m-d H:i:s');
-                $sub->save(false);
-            }
+            $sub = new Subscription();
+            $sub->author_id = $author->id;
+            $sub->phone = '7999000' . rand(1000, 9999);
+            $sub->save(false);
         }
-        echo "Subscriptions seeded.\n";
+        echo "Subscriptions created.\n";
     }
 }
