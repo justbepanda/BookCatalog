@@ -12,7 +12,19 @@
 
 ## Установка и запуск
 
+### Системные требования
+* Docker & Docker Compose
+* Make
+* Git
+
+
 ### Быстрый старт
+
+Клонируйте репозиторий:
+
+```Bash 
+git clone https://github.com/justbepanda/BookCatalog.git
+```
 
 Все основные операции автоматизированы через Makefile:
 
