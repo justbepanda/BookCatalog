@@ -2,18 +2,18 @@
 
 class Book extends CActiveRecord
 {
-    public $author_ids = [];
+    public array $author_ids = [];
     public $new_author_names;
 
-    public function tableName()
+    public function tableName(): string
     {
         return 'books';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
-            ['title, year, isbn', 'required'],
+            ['title, year, isbn', 'required', 'message' => 'Пожалуйста, заполните поле "{attribute}"'],
             ['title', 'length', 'max' => 255],
             ['year', 'numerical', 'integerOnly' => true],
             ['isbn', 'length', 'max' => 20],
@@ -22,7 +22,7 @@ class Book extends CActiveRecord
         ];
     }
 
-    public function relations()
+    public function relations(): array
     {
         return [
             'authors' => [self::MANY_MANY, 'Author', 'book_author(book_id, author_id)'],
@@ -32,7 +32,7 @@ class Book extends CActiveRecord
     /**
      * Логика после сохранения: работа со связями и уведомлениями
      */
-    protected function afterSave()
+    protected function afterSave(): void
     {
         parent::afterSave();
 
@@ -80,7 +80,7 @@ class Book extends CActiveRecord
     /**
      * Привязка автора к книге
      */
-    private function linkAuthor($authorId)
+    private function linkAuthor($authorId): void
     {
         $sql = "INSERT IGNORE INTO book_author (book_id, author_id) VALUES (:bid, :aid)";
         Yii::app()->db->createCommand($sql)->execute([
@@ -92,7 +92,7 @@ class Book extends CActiveRecord
     /**
      * Наполнение очереди СМС
      */
-    private function notifySubscribers($authorIds)
+    private function notifySubscribers($authorIds): void
     {
         $criteria = new CDbCriteria();
         $criteria->addInCondition('author_id', $authorIds);
@@ -114,7 +114,7 @@ class Book extends CActiveRecord
         }
     }
 
-    public function beforeSave()
+    public function beforeSave(): bool
     {
         if (parent::beforeSave()) {
             $now = date('Y-m-d H:i:s');

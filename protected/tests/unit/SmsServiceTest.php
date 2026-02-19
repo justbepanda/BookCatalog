@@ -2,6 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * SMS сервис.
+ * Тесты.
+ */
 class SmsServiceTest extends TestCase
 {
     protected function setUp(): void

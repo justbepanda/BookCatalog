@@ -2,6 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Команда для отправки SMS.
+ * Тесты.
+ */
 class SmsCommandTest extends TestCase
 {
     protected function setUp(): void
@@ -19,7 +23,7 @@ class SmsCommandTest extends TestCase
      */
     public function testProcessQueueSuccessfully()
     {
-        // 1. Подготовка: кладем "фейковое" сообщение в очередь
+        // кладем сообщение в очередь
         Yii::app()->db->createCommand()->insert('sms_queue', [
             'phone' => '79001112233',
             'message' => 'Тестовое сообщение',
@@ -27,7 +31,7 @@ class SmsCommandTest extends TestCase
             'created_at' => date('Y-m-d H:i:s'),
         ]);
 
-        // 2. Запуск команды через Runner (как это делает Cron)
+        // Запуск команды через Runner
         $runner = new CConsoleCommandRunner();
         $runner->addCommands(Yii::getPathOfAlias('application.commands'));
 
@@ -36,7 +40,7 @@ class SmsCommandTest extends TestCase
         $runner->run(['yiic', 'smsqueue', 'process']);
         $output = ob_get_clean();
 
-        // 3. Проверка: статус должен измениться на 1 (Успех)
+        // Проверка: статус должен измениться на 1 (Успех)
         $sms = Yii::app()->db->createCommand()
             ->select('*')
             ->from('sms_queue')

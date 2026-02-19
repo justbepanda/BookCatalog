@@ -2,39 +2,50 @@
 
 class Subscription extends CActiveRecord
 {
-    public function tableName()
+    /**
+     * @return string
+     */
+    public function tableName(): string
     {
         return 'subscriptions';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return array(
             array('author_id, phone', 'required'),
             array('author_id', 'numerical', 'integerOnly' => true),
-            // Очистка телефона перед валидацией
             array('phone', 'filter', 'filter' => function ($value) {
                 return preg_replace('/[^0-9]/', '', $value);
             }),
             array('phone', 'length', 'min' => 10, 'max' => 15),
-            // Проверка на уникальность пары автор+телефон
             array('phone', 'uniqueCombination'),
         );
     }
 
-    public function relations()
+    /**
+     * @return array[]
+     */
+    public function relations(): array
     {
         return [
             'author' => [self::BELONGS_TO, 'Author', 'author_id'],
         ];
     }
 
+    /**
+     * @param $className
+     * @return mixed|Subscription
+     */
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
     }
 
-    public function beforeSave()
+    /**
+     * @return bool
+     */
+    public function beforeSave(): bool
     {
         if (parent::beforeSave()) {
             $now = date('Y-m-d H:i:s');

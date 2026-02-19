@@ -475,3 +475,8 @@ div.search-form {
     font-style: italic;
     color: #6a737d;
 }
+
+input.error, select.error, textarea.error {
+    border: 2px solid red;
+    background-color: #fff6f6;
+}

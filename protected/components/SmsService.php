@@ -19,7 +19,7 @@ class SmsService
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json; charset=utf-8', // Добавили кодировку в заголовок
+            'Content-Type: application/json; charset=utf-8',
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 

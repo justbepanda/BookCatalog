@@ -16,7 +16,7 @@ $this->pageTitle = Yii::app()->name;
                 <a href="<?php echo Yii::app()->createUrl('Book/default/index'); ?>" class="btn-catalog">Каталог книг</a>
             </li>
             <li>
-                <a href="<?php echo Yii::app()->createUrl('Author/default/index'); ?>" class="btn-outline">Наши авторы</a>
+                <a href="<?php echo Yii::app()->createUrl('Author/default/index'); ?>" class="btn-outline">Список авторов</a>
             </li>
         </ul>
     </div>
@@ -43,6 +43,6 @@ $this->pageTitle = Yii::app()->name;
     <?php if (Yii::app()->user->isGuest): ?>
         Для управления контентом, пожалуйста, перейдите на страницу <a href="<?php echo Yii::app()->createUrl('site/login'); ?>">авторизации</a>.
     <?php else: ?>
-        Вы авторизованы как администратор. Вам доступны функции управления в верхнем меню.
+        Вы авторизованы как администратор.
     <?php endif; ?>
 </div>

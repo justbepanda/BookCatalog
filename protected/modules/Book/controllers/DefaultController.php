@@ -2,12 +2,12 @@
 
 class DefaultController extends Controller
 {
-    public function filters()
+    public function filters(): array
     {
         return ['accessControl'];
     }
 
-    public function accessRules()
+    public function accessRules(): array
     {
         return [
             ['allow', 'actions' => ['index'], 'users' => ['*']],
@@ -16,13 +16,23 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionIndex()
+    /**
+     * Просмотр списка
+     *
+     * @return void
+     */
+    public function actionIndex(): void
     {
         $books = Book::model()->with('authors')->findAll();
         $this->render('index', ['books' => $books]);
     }
 
-    public function actionCreate()
+    /**
+     * Создание записи
+     *
+     * @return void
+     */
+    public function actionCreate(): void
     {
         $book = new Book();
 
@@ -51,7 +61,14 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionUpdate($id)
+    /**
+     * Обновление записи
+     *
+     * @param $id
+     * @return void
+     * @throws CHttpException
+     */
+    public function actionUpdate($id): void
     {
         $book = Book::model()->findByPk($id);
         if (!$book) throw new CHttpException(404);
@@ -82,7 +99,14 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionDelete($id)
+    /**
+     * Удаление записи
+     *
+     * @param $id
+     * @return void
+     * @throws CDbException
+     */
+    public function actionDelete($id): void
     {
         $book = Book::model()->findByPk($id);
         if ($book) $book->delete();

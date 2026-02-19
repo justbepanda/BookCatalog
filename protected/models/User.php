@@ -2,12 +2,15 @@
 
 class User extends CActiveRecord
 {
-    public function tableName()
+    /**
+     * @return string
+     */
+    public function tableName(): string
     {
         return 'users';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             ['username, password_hash, role', 'required'],
@@ -15,12 +18,19 @@ class User extends CActiveRecord
         ];
     }
 
-    public static function model($className = __CLASS__)
+    /**
+     * @param $className
+     * @return mixed|User
+     */
+    public static function model($className = __CLASS__): mixed
     {
         return parent::model($className);
     }
 
-    public function beforeSave()
+    /**
+     * @return bool
+     */
+    public function beforeSave(): bool
     {
         if (parent::beforeSave()) {
             $now = date('Y-m-d H:i:s');

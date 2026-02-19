@@ -2,12 +2,15 @@
 
 class Author extends CActiveRecord
 {
-    public function tableName()
+    /**
+     * @return string
+     */
+    public function tableName(): string
     {
         return 'authors';
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             ['full_name', 'required'],
@@ -15,7 +18,10 @@ class Author extends CActiveRecord
         ];
     }
 
-    public function relations()
+    /**
+     * @return array[]
+     */
+    public function relations(): array
     {
         return [
             // связь с книгами через pivot
@@ -26,12 +32,19 @@ class Author extends CActiveRecord
         ];
     }
 
-    public static function model($className = __CLASS__)
+    /**
+     * @param $className
+     * @return Author|mixed
+     */
+    public static function model($className = __CLASS__): mixed
     {
         return parent::model($className);
     }
 
-    public function beforeSave()
+    /**
+     * @return bool
+     */
+    public function beforeSave(): bool
     {
         if (parent::beforeSave()) {
             $now = date('Y-m-d H:i:s');

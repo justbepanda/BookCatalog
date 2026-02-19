@@ -34,7 +34,7 @@ RUN addgroup --gid $GID devgroup \
 RUN mkdir -p /var/www/images/books /var/www/protected/runtime \
     && chown -R $UID:$GID /var/www
 
-# Создаем лог-файл и даем права devuser
+# Создаем файл для лога смс оповещаний
 RUN touch /var/www/protected/runtime/sms_cron.log \
     && chown $UID:$GID /var/www/protected/runtime/sms_cron.log
 

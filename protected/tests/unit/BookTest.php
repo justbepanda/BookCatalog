@@ -2,6 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Книги.
+ * Тесты.
+ */
 class BookTest extends TestCase
 {
 
@@ -12,7 +16,7 @@ class BookTest extends TestCase
             $config = dirname(__FILE__) . '/../../config/test.php';
             Yii::createWebApplication($config);
         }
-        // Очистка БД перед каждым тестом
+
         $db = Yii::app()->db;
         $db->createCommand('SET FOREIGN_KEY_CHECKS=0')->execute();
         $db->createCommand('DELETE FROM sms_queue')->execute();
@@ -25,27 +29,27 @@ class BookTest extends TestCase
 
     public function testCreateBookWithAuthorsAndNotify()
     {
-        // 1. Создаем автора
+        // Создаем автора
         $author = new Author();
         $author->full_name = 'Тестовый Автор';
         $author->save();
 
-        // 2. Создаем подписчика на этого автора
+        // Создаем подписчика на этого автора
         $sub = new Subscription();
         $sub->author_id = $author->id;
         $sub->phone = '79001112233';
         $sub->save();
 
-        // 3. Создаем книгу (используя логику из нашей обновленной модели)
+        // Создаем книгу
         $book = new Book();
         $book->title = 'Тестовая Книга';
         $book->year = 2024;
         $book->isbn = '111-222';
-        $book->author_ids = [$author->id]; // Привязка через afterSave
+        $book->author_ids = [$author->id];
 
         $this->assertTrue($book->save(), 'Книга должна успешно сохраниться');
 
-        // 4. Проверяем связь в БД
+        // Проверяем связь в БД
         $linked = Yii::app()->db->createCommand()
             ->select('count(*)')
             ->from('book_author')
@@ -54,7 +58,7 @@ class BookTest extends TestCase
 
         $this->assertEquals(1, $linked, 'Связь с автором должна быть создана в таблице book_author');
 
-        // 5. Проверяем очередь СМС
+        // Проверяем очередь СМС
         $sms = Yii::app()->db->createCommand()
             ->select('*')
             ->from('sms_queue')
